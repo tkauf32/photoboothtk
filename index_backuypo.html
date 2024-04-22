@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Preview</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        socket.on('new image', data => {
+            const img = document.getElementById('preview');
+            img.src = data.path; // Update the image source to the new image
+        });
+    </script>
+</head>
+<body>
+    <h1>Image Preview</h1>
+    <img id="preview" src="" alt="Preview will be displayed here" />
+</body>
+</html>
