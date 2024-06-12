@@ -7,18 +7,60 @@
     <title>Image Display</title>
     <link rel="stylesheet" href="styles/style.css">
     <script src="/socket.io/socket.io.js"></script>
+    <style>
+        #countdown {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 6em;
+            color: white;
+            -webkit-text-stroke: 2px black; /* Add black border */
+            display: none;
+        }
+        #flash {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: none;
+        }
+        #startButton {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5em;
+            padding: 10px 20px;
+        }
+        #webcamContainer {
+            position: relative;
+            display: inline-block;
+        }
+    </style>
 </head>
 <body>
     <h1>Image Display</h1>
+    <div id="webcamContainer">
+        <video id="webcam" autoplay style="width:100%; height:auto;"></video>
+        <div id="countdown"></div>
+        <div id="flash"></div>
+        <button id="startButton">Start</button>
+    </div>
     <img id="preview" src="" alt="Preview will be displayed here" style="display:none;"/>
     <div id="imageContainer" style="display:none;"></div>
-    <button id="startButton">Start</button>
     <button id="backButton" style="display:none;">Back</button>
     <button id="startOverButton" style="display:none;">Start Over</button>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const socket = io(); // Connect to the server
             const body = document.body;
+            const webcamContainer = document.getElementById('webcamContainer');
+            const video = document.getElementById('webcam');
+            const countdown = document.getElementById('countdown');
+            const flash = document.getElementById('flash');
             const preview = document.getElementById('preview');
             const imageContainer = document.getElementById('imageContainer');
             const startButton = document.getElementById('startButton');
@@ -31,6 +73,9 @@
                 startButton.style.display = 'block';
                 backButton.style.display = 'none';
                 startOverButton.style.display = 'none';
+                countdown.style.display = 'none';
+                flash.style.display = 'none';
+                video.style.display = 'block';
             }
 
             function showGrid() {
@@ -38,6 +83,7 @@
                 imageContainer.style.display = 'grid';
                 backButton.style.display = 'none'; // Only show when an image is clicked
                 startOverButton.style.display = 'block';
+                video.style.display = 'none'; // Hide webcam
             }
 
             function makeMainImage(imgPath) {
@@ -47,6 +93,15 @@
                 backButton.style.display = 'none'; // Initially hidden, will be shown when an image is clicked
                 startOverButton.style.display = 'none';
             }
+
+            // Request access to the webcam
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(stream => {
+                    video.srcObject = stream;
+                })
+                .catch(error => {
+                    console.error('Error accessing webcam:', error);
+                });
 
             socket.on('new image', data => {
                 makeMainImage(data.path);
@@ -65,6 +120,18 @@
                     imageContainer.appendChild(img);
                 });
                 showGrid();
+            });
+
+            socket.on('countdown', number => {
+                countdown.style.display = 'block';
+                countdown.textContent = number > 0 ? number : '';
+                if (number === 0) {
+                    countdown.style.display = 'none';
+                    flash.style.display = 'block';
+                    setTimeout(() => {
+                        flash.style.display = 'none';
+                    }, 100); // Flash for a short duration
+                }
             });
 
             backButton.onclick = showGrid; // When back button is clicked, return to grid view
@@ -88,3 +155,5 @@
     </script>
 </body>
 </html>
+
+

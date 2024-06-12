@@ -1,49 +1,55 @@
-/* style.css */
-html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
     display: flex;
-    flex-direction: column;
-    align-items: center;
     justify-content: center;
-    background: #f0f0f0;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
 }
 
-img {
-    max-width: 90vw;
-    max-height: 80vh;
-    object-fit: contain;
-    border: 1px solid #ddd;
-    box-shadow: 2px 2px 2px #ccc;
-    margin-bottom: 10px;
+.container {
+    text-align: center;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-#imageContainer {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-auto-rows: minmax(100px, auto);
-    gap: 10px;
-    width: 100%;
-    max-width: 70vw;
-    margin-top: 20px;
+h1 {
+    color: #333;
+    margin-bottom: 20px;
 }
 
-#imageContainer img {
+#webcamContainer {
+    position: relative;
+    display: inline-block;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+video {
     width: 100%;
     height: auto;
-    object-fit: contain;
-    border: 1px solid #ddd;
-    box-shadow: 2px 2px 2px #ccc;
+    border-radius: 10px;
 }
 
-button {
+#startButton {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.5em;
     padding: 10px 20px;
-    margin-top: 20px;
-    font-size: 1.2em;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.3s;
 }
 
-#backButton {
-    display: none;
+#startButton:hover {
+    background-color: #0056b3;
 }
