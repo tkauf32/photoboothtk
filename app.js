@@ -13,13 +13,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Serve the index.html file
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public/index.html')));
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'script.js')));
 
 // Handle socket connection
 io.on('connection', (socket) => {
     socket.on('start capture', async () => {
         try {
-            const images = await capture_images();
-            socket.emit('display all images', { images: images.map(image => `images/${image}`) });
+            const dirname = `image_set_${Date.now()}`; // name the directory after datetime
+            const images = await capture_images(dirname);
+            socket.emit('display all images', { images: images.map(image => `images/${dirname}/${image}`) });
         } catch (error) {
             console.error("Error capturing images:", error);
             socket.emit('error', 'Failed to capture images');
@@ -30,14 +32,50 @@ io.on('connection', (socket) => {
 // Listen on port 3000
 server.listen(3000, () => console.log('Server running on port 3000'));
 
+function makePhotoSetDirectory() {
+    const dirname = `image_set_${Date.now()}`; // name the directory after datetime
+    exec(`mkdir -p ${dirname}`)
+
+}
+
+async function countdownTimer(duration) {
+    const countDownEl = document.getElementById('countdown');
+    countDownEl.style.display = 'inline';
+    for (let i = duration; i >= 0; i--) {
+        countDownEl.textContent = i;
+        await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+    countDownEl.style.display = 'none';
+}
+
 // Function to capture images using gphoto2
-async function capture_images() {
+async function capture_images(dirname) {
     const imagePaths = [];
-    const delayBetweenCaptures = 100; // 4 seconds delay
+    const delayBetweenCaptures = 100;
 
     for (let i = 0; i < 4; i++) {
+
+        if (i == 0) {
+            console.log("First Pass i=0. Making directory for photos")
+            try {
+                await new Promise((resolve, reject) => {
+                    console.log(`Creating directory for ${dirname}`);
+                    exec(`mkdir -p public/images/${dirname}`, (error, stdout, stderr) => {
+                        if (error) {
+                            console.error(`Error making directory ${dirname}: ${stderr}`);
+                            return reject(error);  // Reject the promise if an error occurs
+                        }
+                        resolve(stdout); // Resolve the promise on success
+                    });
+                });
+            } catch (error) {
+                console.error(`failed to make directory ${dirname}`);
+                break;
+            }
+        }
+
         const imageName = `image_${Date.now()}.jpg`; // Unique image name
-        const imagePath = path.join(__dirname, 'public/images', imageName);
+        const imagePath = path.join(__dirname, `public/images/${dirname}`, imageName);
 
         // Implement delay between captures
         try {

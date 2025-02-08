@@ -1,20 +1,22 @@
 /* style.css */
 html, body {
-    height: 100%;
+    /* height: 100%; */
+    height: 100vh;
     margin: 0;
     padding: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: #f0f0f0;
+    background-color: #0D0D0D;
+    color: #FFFFFF;
 }
 
 img {
     max-width: 90vw;
     max-height: 80vh;
     object-fit: contain;
-    border: 1px solid #ddd;
+    border: 1px solid #1A1A1A;
     box-shadow: 2px 2px 2px #ccc;
     margin-bottom: 10px;
 }
@@ -29,6 +31,13 @@ img {
     margin-top: 20px;
 }
 
+/* Center and Style Title */
+.title {
+    font-size: 3rem;
+    text-align: center;
+    text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
+}
+
 #imageContainer img {
     width: 100%;
     height: auto;
@@ -37,8 +46,48 @@ img {
     box-shadow: 2px 2px 2px #ccc;
 }
 
+/* #cameraStream {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+} */
+
+#cameraStream {
+    width: 1400px; 
+    height: 1050px; 
+    overflow: hidden; 
+    position: relative; 
+    margin: auto;
+    border-radius: 10px;
+}
+
+#iframe {
+    position: relative;
+    top: -200px; 
+    left: 50%; 
+    transform: 
+    translateX(-50%); 
+    width: 1500px;
+    height: 1150px; 
+}
+
+#countdown {
+    display:none;
+    position: absolute;
+    left: 50%;
+    bottom: 50%;
+    transform: translate(-50%, 50%); /* Offsets the button so its center is at that point */
+    color: rgb(255, 255, 255, 0.8);
+    border:rgb(26, 26, 26,0.8);
+    font-size: 30em;
+    /* Brings button to above iframe */
+    z-index: 2;
+}
+
 button {
-    padding: 10px 20px;
+    padding: 20px 40px;
     margin-top: 20px;
     font-size: 1.2em;
     cursor: pointer;
@@ -47,3 +96,33 @@ button {
 #backButton {
     display: none;
 }
+
+#startButton {
+    position: absolute;
+    left: 50%;
+    bottom: 12.5%;  /* Places the button 12.5% above the bottom edge */
+    transform: translate(-50%, 50%); /* Offsets the button so its center is at that point */
+    
+    /* Base styling for the button */
+    color: white; /* Text fille color */
+    -webkit-text-stroke: rgba(169, 169, 169, 0.3);/* Text stroke: 1px thick black border */
+    padding: 40px 20px;
+    font-size: 2.5em;
+    font-weight: bold;
+    cursor: pointer;
+    border: 2px solid rgba(169, 169, 169, 0.3);
+    border-radius: 120px;
+    background-color: rgba(169, 169, 169, 0.6);
+
+    /* Brings button to above iframe */
+    z-index: 1;
+    
+    /* Smooth transition for the active effect */
+    transition: transform 0.1s ease, background-color 0.1s ease;
+}
+
+#startButton:active {
+    transform: translate(-50%, 50%) scale(0.95); /* Slightly shrink the button */
+    background-color: #ddd; /* Change background color as feedback */
+}
+

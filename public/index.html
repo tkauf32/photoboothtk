@@ -4,87 +4,22 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Display</title>
+    <title>Photobooth</title>
     <link rel="stylesheet" href="styles/style.css">
     <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
-    <h1>Image Display</h1>
+    <!-- <h1>Photobooth</h1> -->
     <img id="preview" src="" alt="Preview will be displayed here" style="display:none;"/>
     <div id="imageContainer" style="display:none;"></div>
-    <button id="startButton">Start</button>
+    <!-- <button id="startButton">Start</button> -->
     <button id="backButton" style="display:none;">Back</button>
     <button id="startOverButton" style="display:none;">Start Over</button>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const socket = io(); // Connect to the server
-            const body = document.body;
-            const preview = document.getElementById('preview');
-            const imageContainer = document.getElementById('imageContainer');
-            const startButton = document.getElementById('startButton');
-            const backButton = document.getElementById('backButton');
-            const startOverButton = document.getElementById('startOverButton');
-
-            function resetToInitialState() {
-                preview.style.display = 'none';
-                imageContainer.style.display = 'none';
-                startButton.style.display = 'block';
-                backButton.style.display = 'none';
-                startOverButton.style.display = 'none';
-            }
-
-            function showGrid() {
-                preview.style.display = 'none';
-                imageContainer.style.display = 'grid';
-                backButton.style.display = 'none'; // Only show when an image is clicked
-                startOverButton.style.display = 'block';
-            }
-
-            function makeMainImage(imgPath) {
-                preview.src = imgPath;
-                preview.style.display = 'block';
-                imageContainer.style.display = 'none';
-                backButton.style.display = 'none'; // Initially hidden, will be shown when an image is clicked
-                startOverButton.style.display = 'none';
-            }
-
-            socket.on('new image', data => {
-                makeMainImage(data.path);
-            });
-
-            socket.on('display all images', data => {
-                imageContainer.innerHTML = '';
-                data.images.forEach(imgPath => {
-                    const img = document.createElement('img');
-                    img.src = imgPath;
-                    img.alt = "Captured Image";
-                    img.onclick = () => {
-                        makeMainImage(imgPath);
-                        backButton.style.display = 'block'; // Show back button only when an image is enlarged
-                    };
-                    imageContainer.appendChild(img);
-                });
-                showGrid();
-            });
-
-            backButton.onclick = showGrid; // When back button is clicked, return to grid view
-            startOverButton.onclick = resetToInitialState; // When start over is clicked, reset
-
-            startButton.onclick = () => {
-                socket.emit('start capture');
-                startButton.style.display = 'none'; // Hide start button after sequence starts
-                startOverButton.style.display = 'none'; // Hide start over during sequence
-            };
-
-            // Detect clicks on the body but not on the image
-            body.addEventListener('click', (event) => {
-                if (event.target === body || event.target === imageContainer) {
-                    showGrid(); // If clicked outside of an image, show the grid
-                }
-            });
-
-            resetToInitialState(); // Initialize to initial state
-        });
-    </script>
+    <div id="cameraStream">
+        <button id="startButton">Start</button>
+        <div id="countdown">3</div>
+        <iframe id="iframe" src="http://192.168.4.107/#view" ></iframe>
+    </div>
 </body>
+<script src="script.js"></script>
 </html>
