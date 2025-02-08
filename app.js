@@ -38,16 +38,6 @@ function makePhotoSetDirectory() {
 
 }
 
-async function countdownTimer(duration) {
-    const countDownEl = document.getElementById('countdown');
-    countDownEl.style.display = 'inline';
-    for (let i = duration; i >= 0; i--) {
-        countDownEl.textContent = i;
-        await new Promise(resolve => setTimeout(resolve, 1000));
-    }
-    countDownEl.style.display = 'none';
-}
-
 // Function to capture images using gphoto2
 async function capture_images(dirname) {
     const imagePaths = [];
