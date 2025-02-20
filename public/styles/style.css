@@ -13,11 +13,12 @@ html, body {
 }
 
 img {
+    width: 90%;
     max-width: 90vw;
-    max-height: 80vh;
+    max-height: 100vh;
     object-fit: contain;
     border: 1px solid #1A1A1A;
-    box-shadow: 2px 2px 2px #ccc;
+/*     box-shadow: 2px 2px 2px #ccc; */
     margin-bottom: 10px;
 }
 
@@ -42,8 +43,9 @@ img {
     width: 100%;
     height: auto;
     object-fit: contain;
-    border: 1px solid #ddd;
-    box-shadow: 2px 2px 2px #ccc;
+/*     border: 2px solid #ddd; */
+/*     border-radius: 1px; */
+/*     box-shadow: 2px 2px 2px #ccc; */
 }
 
 /* #cameraStream {
@@ -57,7 +59,7 @@ img {
 #cameraStream {
     width: 80vw;          /* 80% of the viewport width */
     height: 100vh;         /* 80% of the viewport height */
-    position: absolute;   /* Establish positioning context */
+    position: relative;   /* Establish positioning context */
     margin: auto;         /* Center container horizontally in its parent */
     border-radius: 10px;
     background-color: #000; /* Background for contrast */
@@ -67,9 +69,9 @@ img {
 
 
 #iframe {
-    position: relative;   /* Remove from normal document flow */
-    top: 0;               /* Align to the top of the container */
-    left: 0;              /* Align to the left of the container */
+    position: absolute;   /* Remove from normal document flow */
+    top: 50;               /* Align to the top of the container */
+    left: 50;              /* Align to the left of the container */
     width: 100%;          /* Fill 100% of the parent's width */
     height: 100%;         /* Fill 100% of the parent's height */
     border: none;         /* Remove the default border */
@@ -127,4 +129,3 @@ button {
     transform: translate(-50%, 50%) scale(0.95); /* Slightly shrink the button */
     background-color: #ddd; /* Change background color as feedback */
 }
-
