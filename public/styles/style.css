@@ -55,22 +55,24 @@ img {
 } */
 
 #cameraStream {
-    width: 1400px; 
-    height: 1050px; 
-    overflow: hidden; 
-    position: relative; 
-    margin: auto;
+    width: 80vw;          /* 80% of the viewport width */
+    height: 100vh;         /* 80% of the viewport height */
+    position: absolute;   /* Establish positioning context */
+    margin: auto;         /* Center container horizontally in its parent */
     border-radius: 10px;
+    background-color: #000; /* Background for contrast */
+    overflow: hidden;     /* Hide any overflow */
+    /* Remove flex properties if they conflict with absolute positioning */
 }
 
+
 #iframe {
-    position: relative;
-    top: -200px; 
-    left: 50%; 
-    transform: 
-    translateX(-50%); 
-    width: 1500px;
-    height: 1150px; 
+    position: relative;   /* Remove from normal document flow */
+    top: 0;               /* Align to the top of the container */
+    left: 0;              /* Align to the left of the container */
+    width: 100%;          /* Fill 100% of the parent's width */
+    height: 100%;         /* Fill 100% of the parent's height */
+    border: none;         /* Remove the default border */
 }
 
 #countdown {

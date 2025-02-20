@@ -71,7 +71,7 @@ async function capture_images(dirname) {
         try {
             await new Promise((resolve, reject) => {
                 console.log(`Attempting to capture image: ${imageName}`);
-                exec(`gphoto2 --capture-image-and-download --keep --filename ${imagePath}`, (error, stdout, stderr) => {
+                exec(`gphoto2 --wait-event-and-download=500ms --capture-image-and-download --keep --filename ${imagePath}`, (error, stdout, stderr) => {
                     if (error) {
                         console.error(`Error capturing image: ${stderr}`);
                         reject(error);
@@ -88,7 +88,7 @@ async function capture_images(dirname) {
         }
 
         // // Implement delay between captures
-        console.log(`Waiting for ${delayBetweenCaptures / 1000} seconds before next capture.`);
+        // console.log(`Waiting for ${delayBetweenCaptures / 1000} seconds before next capture.`);
         await new Promise(resolve => setTimeout(resolve, delayBetweenCaptures));
     }
 
