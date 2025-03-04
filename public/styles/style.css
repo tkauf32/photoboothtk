@@ -8,11 +8,36 @@ html, body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #0bb19b;
-    background-image: url("clovers.jpg");
-    background-repeat: no-repeat;
+    background-color: #000000;
+    /* background-image: url("clovers.jpg"); */
+    /* background-repeat: no-repeat; */
 
     color: #FFFFFF;
+}
+
+.falling-clover {
+    position: absolute;
+    top: -50px; /* start above the viewport */
+    width: 30px;
+    height: 30px;
+    background-image: url("clover.png"); /* ensure this path is correct */
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0.8;
+    z-index: 9999; /* High z-index to appear above other elements */
+    animation: fall linear infinite;
+  }
+
+/* Keyframe animation for falling and rotating */
+@keyframes fall {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+    }
 }
 
 body > img #preview {
@@ -50,16 +75,8 @@ body > img #preview {
     box-shadow: 2px 2px 2px #ccc;
 }
 
-/* #cameraStream {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10;
-} */
-
 #cameraStream {
-    width: 80vw;          /* 80% of the viewport width */
+    width: 60vw;          /* 80% of the viewport width */
     height: 100vh;         /* 80% of the viewport height */
     position: fixed;      /* Establish positioning context */
     margin: auto;         /* Center container horizontally in its parent */
@@ -78,19 +95,6 @@ body > img #preview {
     border: none;         /* Remove the default border */
     background-color: #1e1e1e; /* Background for contrast */
 
-}
-
-#countdown {
-    display:none;
-    position: absolute;
-    left: 50%;
-    bottom: 50%;
-    transform: translate(-50%, 50%); /* Offsets the button so its center is at that point */
-    color: rgb(255, 255, 255, 0.8);
-    border:rgb(26, 26, 26,0.8);
-    font-size: 30em;
-    /* Brings button to above iframe */
-    z-index: 2;
 }
 
 button {
