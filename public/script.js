@@ -123,23 +123,35 @@ document.addEventListener('DOMContentLoaded', function () {
     function createClover() {
         const clover = document.createElement('div');
         clover.classList.add('falling-clover');
-        // Random horizontal starting position across the viewport width
-        clover.style.left = Math.random() * window.innerWidth + 'px';
+    
+        // Random number between 0 and 1 to decide side
+        const random = Math.random();
+        let leftPos;
+        if (random < 0.5) {
+            // Left side: position anywhere from 0% to 25% of the window width
+            leftPos = Math.random() * (window.innerWidth * 0.25);
+        } else {
+            // Right side: position anywhere from 75% to 100% of the window width
+            leftPos = window.innerWidth * 0.80 + Math.random() * (window.innerWidth * 0.20);
+        }
+        clover.style.left = leftPos + 'px';
+    
         // Random animation duration between 5 and 10 seconds
-        const duration = 5 + Math.random() * 5;
+        const duration = 3 + Math.random() * 5;
         clover.style.animationDuration = duration + 's';
         // Optionally, add a random animation delay
         clover.style.animationDelay = Math.random() * 5 + 's';
-        // Append clover to the body
-        document.body.appendChild(clover);
     
-        // Remove the clover after the animation ends to keep the DOM clean
+        // Append the clover to the clovers container
+        document.getElementById('clovers-container').appendChild(clover);
+    
+        // Remove the clover after its animation ends to keep the DOM clean
         setTimeout(() => {
           clover.remove();
-        }, duration * 1000);
-      }
+        }, duration * 3000);
+    }
     
-      // Create a new clover every 500 milliseconds
-      setInterval(createClover, 500);
+    // Create a new clover every 500 milliseconds
+    setInterval(createClover, 200);
 
 });
