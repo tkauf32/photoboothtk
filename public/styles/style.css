@@ -9,15 +9,18 @@ html, body {
     align-items: center;
     justify-content: center;
     background-color: #0bb19b;
+    background-image: url("clovers.jpg");
+    background-repeat: no-repeat;
+
     color: #FFFFFF;
 }
 
-body > img#preview {
+body > img #preview {
     width: 90%;
     max-width: 90vw;
     max-height: 100vh;
     object-fit: contain;
-    border: 1px solid #230fb7;
+    border: 1px solid #000000;
     margin-bottom: 10px;
 }
 
@@ -29,8 +32,6 @@ body > img#preview {
     width: 100%;
     max-width: 70vw;
     margin-top: 20px;
-    background-color: #c3da32; /* Background for contrast */
-
 }
 
 /* Center and Style Title */
@@ -44,8 +45,6 @@ body > img#preview {
     width: 100%;
     height: 100%;
     object-fit: contain;
-    background-color: #c017af; /* Background for contrast */
-
     border: 2px solid #ddd;
     border-radius: 1px;
     box-shadow: 2px 2px 2px #ccc;
@@ -60,12 +59,11 @@ body > img#preview {
 } */
 
 #cameraStream {
-    width: 100vw;          /* 80% of the viewport width */
+    width: 80vw;          /* 80% of the viewport width */
     height: 100vh;         /* 80% of the viewport height */
     position: fixed;      /* Establish positioning context */
     margin: auto;         /* Center container horizontally in its parent */
-    border-radius: 10px;
-    background-color: #ca0909; /* Background for contrast */
+    border-radius: 100px;
     overflow: hidden;     /* Hide any overflow */
     /* Remove flex properties if they conflict with absolute positioning */
 }
@@ -78,7 +76,7 @@ body > img#preview {
     width: 100%;          /* Fill 100% of the parent's width */
     height: 100%;         /* Fill 100% of the parent's height */
     border: none;         /* Remove the default border */
-    background-color: #15e538; /* Background for contrast */
+    background-color: #1e1e1e; /* Background for contrast */
 
 }
 
