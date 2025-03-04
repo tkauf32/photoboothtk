@@ -1,0 +1,37 @@
+python3 img2img.py -ip "input.png" -op "output.png" -p "turn everyone into anime characters with big personalities"
+/usr/lib/python3/dist-packages/requests/__init__.py:87: RequestsDependencyWarning: urllib3 (2.2.3) or chardet (3.0.4) doesn't match a supported version!
+  warnings.warn("urllib3 ({}) or chardet ({}) doesn't match a supported "
+Reading from: input.png
+The type of image is: <class 'PIL.Image.Image'>
+Model is: CompVis/stable-diffusion-v1-4
+CUDA Version: 12.4
+CUDA Available: True
+CUDA Device Count: 1
+Using: cuda
+Prompt is: turn everyone into anime characters with big personalities
+Strength is: 0.75
+Loading pipeline components...:  29%|█████████████████████████████████████████▏                                                                                                      | 2/7 [00:00<00:00, 14.56it/s]`text_config_dict` is provided which will be used to initialize `CLIPTextConfig`. The value `text_config["id2label"]` will be overriden.
+Loading pipeline components...: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 7/7 [00:00<00:00, 22.35it/s]
+Traceback (most recent call last):
+  File "/home/tommy/photoboothtk/img2img.py", line 53, in <module>
+    main()
+  File "/home/tommy/photoboothtk/img2img.py", line 42, in main
+    pipe = StableDiffusionImg2ImgPipeline.from_pretrained(model_id).to(device)
+  File "/home/tommy/.local/lib/python3.10/site-packages/diffusers/pipelines/pipeline_utils.py", line 454, in to
+    module.to(device, dtype)
+  File "/home/tommy/.local/lib/python3.10/site-packages/diffusers/models/modeling_utils.py", line 1031, in to
+    return super().to(*args, **kwargs)
+  File "/home/tommy/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1340, in to
+    return self._apply(convert)
+  File "/home/tommy/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 900, in _apply
+    module._apply(fn)
+  File "/home/tommy/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 900, in _apply
+    module._apply(fn)
+  File "/home/tommy/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 900, in _apply
+    module._apply(fn)
+  [Previous line repeated 1 more time]
+  File "/home/tommy/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 927, in _apply
+    param_applied = fn(param)
+  File "/home/tommy/.local/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1326, in convert
+    return t.to(
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 58.00 MiB. GPU 0 has a total capacity of 3.71 GiB of which 3.44 MiB is free. Including non-PyTorch memory, this process has 3.69 GiB memory in use. Of the allocated memory 3.57 GiB is allocated by PyTorch, and 58.92 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
