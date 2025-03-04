@@ -14,3 +14,5 @@ make
 # run mjpg streamer
 ./mjpg_streamer -i ./input_uvc.so -d /dev/video0 -r 640x480 -f 30 -o ./output_http.so -w ./www
 
+# run img2img
+python3 img2img.py -ip "input.png" -op "output.png" -p "turn everyone into anime characters with big personalities"
