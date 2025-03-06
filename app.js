@@ -106,9 +106,9 @@ async function capture_images(dirname) {
             // Construct the unique filename pattern
             const filenamePattern = path.join(directory, 'image_%Y%m%d%H%M%S.jpg');
             const args = [
-                '--wait-event-and-download=500ms',  // Correct flag
+                '--wait-event-and-download=5000ms',  // Correct flag
                 '--capture-image-and-download',
-                '--interval=3',
+                '--interval=5',
                 '--frames=4',
                 '--keep',
                 '--filename', filenamePattern
@@ -137,12 +137,18 @@ async function capture_images(dirname) {
                     }
                     // Filter out non-jpg files if needed
                     const imageFiles = files.filter(file => file.endsWith('.jpg'));
+                    copyImagesToCloud(directory);
                     resolve(imageFiles);
                 });
             });
         });
     });
 }
+
+async function copyImagesToCloud(dir) {
+    console.log(`copying files in ${dir} to the cloud`);
+    exec(`rclone copy ${dir} GooglePhotosTest02:album/myTestAlbum`);
+};
 
 // Socket.IO integration
 io.on('connection', (socket) => {
