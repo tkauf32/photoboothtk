@@ -122,3 +122,6 @@ sudo mv /usr/libexec/gvfs-gphoto2-volume-monitor /usr/libexec/gvfs-gphoto2-volum
 - use dockercompose to manage and launch all the containers at once
 - probably much work for not much value. Maybe someone else will use the project and it will help them. 
 - printing the photos
+
+# run img2img
+python3 img2img.py -ip "input.png" -op "output.png" -p "turn everyone into anime characters with big personalities"
