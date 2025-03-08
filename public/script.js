@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const startOverButton = document.getElementById('startOverButton');
     const cameraStream = document.getElementById('cameraStream');
     const iframe = document.getElementById("iframe");
+    const countDownEl = document.getElementById('countdown');
 
     function resetToInitialState() {
         preview.style.display = 'none';
@@ -17,6 +18,8 @@ document.addEventListener('DOMContentLoaded', function () {
         startOverButton.style.display = 'none';
         iframe.style.display = 'inline'
         countDownEl.style.display = 'none'
+        cameraStream.style.display = 'inline';
+        iframe.style.display = 'inline';
     }
 
     function showGrid() {
@@ -24,44 +27,44 @@ document.addEventListener('DOMContentLoaded', function () {
         imageContainer.style.display = 'grid';
         backButton.style.display = 'none'; // Only show when an image is clicked
         startOverButton.style.display = 'block';
-        iframe.style.display = 'none'
+        iframe.style.display = 'none';
+        cameraStream.style.display = 'none';
     }
 
-    function startCountDown() {
-        let countDownValue = 3;
-        let NumberOfPhotosLeft = 4;
-        const countDownEl = document.getElementById('countdown');
-        countDownEl.textContent = countDownValue;
+    // function startCountDown() {
+    //     let countDownValue = 3;
+    //     let NumberOfPhotosLeft = 4;
+    //     countDownEl.textContent = countDownValue;
 
-        const intervalId = setInterval(() => {
-            countDownEl.style.display = "inline"; // show the countdown element on screen
-            // if we still have photos left, reset the timer
+    //     const intervalId = setInterval(() => {
+    //         countDownEl.style.display = "inline"; // show the countdown element on screen
+    //         // if we still have photos left, reset the timer
 
-            if (countDownValue < 1) {
-                if (NumberOfPhotosLeft > 0) {
-                    flashScreen() // make the screen flash!!!
-                    NumberOfPhotosLeft--
-                    countDownValue=3
-                    console.log("Resetting countdown. photo #%d", NumberOfPhotosLeft)
-                } else {
-                    console.log("Done!")
-                    countDownEl.style.display = "none"; // hide the coundown element
-                    clearInterval(intervalId)
-                }
-                console.log("Resetting countdown. photo #%d", NumberOfPhotosLeft)
+    //         if (countDownValue < 1) {
+    //             if (NumberOfPhotosLeft > 0) {
+    //                 flashScreen() // make the screen flash!!!
+    //                 NumberOfPhotosLeft--
+    //                 countDownValue=3
+    //                 console.log("Resetting countdown. photo #%d", NumberOfPhotosLeft)
+    //             } else {
+    //                 console.log("Done!")
+    //                 countDownEl.style.display = "none"; // hide the coundown element
+    //                 clearInterval(intervalId)
+    //             }
+    //             console.log("Resetting countdown. photo #%d", NumberOfPhotosLeft)
 
-            } else {
-                countDownValue--
-            }
-            countDownEl.textContent = countDownValue;
+    //         } else {
+    //             countDownValue--
+    //         }
+    //         countDownEl.textContent = countDownValue;
 
-        }, 1000);
+    //     }, 1000);
         
-    }
+    // }
     
-    function flashScreen() {
+    // function flashScreen() {
 
-    }
+    // }
 
     function makeMainImage(imgPath) {
         preview.src = imgPath;
@@ -77,8 +80,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     socket.on('display all images', data => {
         // startButton.style.display = 'none'
+        console.log('Received images:', data);
         imageContainer.innerHTML = '';
         data.images.forEach(imgPath => {
+            console.log("Image URL: ", imgPath);
             const img = document.createElement('img');
             img.src = imgPath;
             img.alt = "Captured Image";
@@ -114,4 +119,39 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     resetToInitialState(); // Initialize to initial state
+
+    function createClover() {
+        const clover = document.createElement('div');
+        clover.classList.add('falling-clover');
+    
+        // Random number between 0 and 1 to decide side
+        const random = Math.random();
+        let leftPos;
+        if (random < 0.5) {
+            // Left side: position anywhere from 0% to 25% of the window width
+            leftPos = Math.random() * (window.innerWidth * 0.25);
+        } else {
+            // Right side: position anywhere from 75% to 100% of the window width
+            leftPos = window.innerWidth * 0.80 + Math.random() * (window.innerWidth * 0.20);
+        }
+        clover.style.left = leftPos + 'px';
+    
+        // Random animation duration between 5 and 10 seconds
+        const duration = 3 + Math.random() * 5;
+        clover.style.animationDuration = duration + 's';
+        // Optionally, add a random animation delay
+        clover.style.animationDelay = Math.random() * 5 + 's';
+    
+        // Append the clover to the clovers container
+        document.getElementById('clovers-container').appendChild(clover);
+    
+        // Remove the clover after its animation ends to keep the DOM clean
+        setTimeout(() => {
+          clover.remove();
+        }, duration * 3000);
+    }
+    
+    // Create a new clover every 500 milliseconds
+    setInterval(createClover, 200);
+
 });

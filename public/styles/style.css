@@ -8,27 +8,69 @@ html, body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #0D0D0D;
+    background-color: #000000;
+    /* background-image: url("clovers.jpg"); */
+    /* background-repeat: no-repeat; */
+    z-index: -1;
     color: #FFFFFF;
 }
 
-img {
+/* Clover Overlay Container */
+#clovers-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none; /* Allows clicks to pass through */
+    z-index: 0; /* Ensures it appears on top */
+}
+
+/* Falling Clover Element */
+.falling-clover {
+    position: absolute;
+    top: -200px; /* Start above the viewport */
+    width: 90px;
+    height: 90px;
+    bottom: 200px;
+    /* background-color:rgba(26, 177, 61, 0.3); */
+    background-image: url("clover_transparent.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0.9;
+    animation: fall linear infinite;
+}
+
+/* Keyframe animation for falling and rotating */
+@keyframes fall {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(150vh) rotate(360deg); /* Increased from 110vh to 150vh */
+        opacity: 1;
+    }
+}
+
+#preview {
+    width: 90%;
     max-width: 90vw;
     max-height: 80vh;
     object-fit: contain;
-    border: 1px solid #1A1A1A;
-    box-shadow: 2px 2px 2px #ccc;
+    border: 2px solid #ffffff;
     margin-bottom: 10px;
+    z-index: 1;
 }
 
 #imageContainer {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-auto-rows: minmax(100px, auto);
-    gap: 10px;
-    width: 100%;
-    max-width: 70vw;
+    grid-auto-rows: minmax(2, 1fr);
+    gap: 15px;
+    width: 90vw;
     margin-top: 20px;
+    z-index: 1;
 }
 
 /* Center and Style Title */
@@ -40,52 +82,49 @@ img {
 
 #imageContainer img {
     width: 100%;
-    height: auto;
-    object-fit: contain;
-    border: 1px solid #ddd;
+    height: 100%;       /* fill the cell vertically as well */
+    object-fit: cover;  /* or 'contain', depending on your desired crop style */
+    border: 2px solid #ddd;
+    border-radius: 1px;
     box-shadow: 2px 2px 2px #ccc;
 }
 
-/* #cameraStream {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10;
-} */
-
 #cameraStream {
-    width: 80vw;          /* 80% of the viewport width */
-    height: 100vh;         /* 80% of the viewport height */
-    position: absolute;   /* Establish positioning context */
+    width: 100vw;          /* 80% of the viewport width */
+    height: 60vh;         /* 80% of the viewport height */
+    position: fixed;      /* Establish positioning context */
     margin: auto;         /* Center container horizontally in its parent */
-    border-radius: 10px;
-    background-color: #000; /* Background for contrast */
+    border-radius: 100px;
     overflow: hidden;     /* Hide any overflow */
+    z-index: 1;
     /* Remove flex properties if they conflict with absolute positioning */
 }
 
+#qrcode-container {
+    position: absolute; /* Allows precise positioning */
+    top: 10%; /* Moves it 68% down from the top */
+    left: 50%; /* Centers it horizontally */
+    transform: translate(-50%, -50%); /* Adjusts to true center */
+    z-index: 1;
+    width: 200px; /* Adjust size as needed */
+    height: 200px;
+}
+
+#qrcode-img {
+    display: block; /* Ensures proper rendering */
+    width: 100%; /* Makes the image fit inside the container */
+    height: auto;
+}
 
 #iframe {
-    position: relative;   /* Remove from normal document flow */
+    position: absolute;   /* Remove from normal document flow */
     top: 0;               /* Align to the top of the container */
     left: 0;              /* Align to the left of the container */
     width: 100%;          /* Fill 100% of the parent's width */
     height: 100%;         /* Fill 100% of the parent's height */
     border: none;         /* Remove the default border */
-}
-
-#countdown {
-    display:none;
-    position: absolute;
-    left: 50%;
-    bottom: 50%;
-    transform: translate(-50%, 50%); /* Offsets the button so its center is at that point */
-    color: rgb(255, 255, 255, 0.8);
-    border:rgb(26, 26, 26,0.8);
-    font-size: 30em;
-    /* Brings button to above iframe */
-    z-index: 2;
+    background-color: #1e1e1e; /* Background for contrast */
+    z-index: 1;
 }
 
 button {
@@ -117,7 +156,7 @@ button {
     background-color: rgba(169, 169, 169, 0.6);
 
     /* Brings button to above iframe */
-    z-index: 1;
+    z-index: 2;
     
     /* Smooth transition for the active effect */
     transition: transform 0.1s ease, background-color 0.1s ease;
@@ -127,4 +166,3 @@ button {
     transform: translate(-50%, 50%) scale(0.95); /* Slightly shrink the button */
     background-color: #ddd; /* Change background color as feedback */
 }
-

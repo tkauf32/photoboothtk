@@ -1,0 +1,33 @@
+/* Ensure the body covers the full viewport and hide overflow */
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #0bb19b;
+    }
+
+/* Style for each falling clover element */
+.falling-clover {
+    position: absolute;
+    top: -50px; /* start above the viewport */
+    width: 30px;
+    height: 30px;
+    background-image: url("clover.png"); /* ensure this path is correct */
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0.8;
+    z-index: 9999; /* High z-index to appear above other elements */
+    animation: fall linear infinite;
+  }
+
+/* Keyframe animation for falling and rotating */
+@keyframes fall {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+    }
+}

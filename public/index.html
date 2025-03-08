@@ -4,22 +4,29 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Photobooth</title>
+    <!-- <title>Photobooth</title> -->
     <link rel="stylesheet" href="styles/style.css">
     <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
-    <!-- <h1>Photobooth</h1> -->
+    <h1>Happy Birthday Olivia!!</h1>
     <img id="preview" src="" alt="Preview will be displayed here" style="display:none;"/>
     <div id="imageContainer" style="display:none;"></div>
-    <!-- <button id="startButton">Start</button> -->
     <button id="backButton" style="display:none;">Back</button>
     <button id="startOverButton" style="display:none;">Start Over</button>
+
     <div id="cameraStream">
         <button id="startButton">Start</button>
         <div id="countdown">3</div>
-        <iframe id="iframe" src="http://raspberrypi.local:8080/?action=stream"></iframe>
+        <!-- <iframe id="iframe" src="http://192.168.4.73:8080/stream_simple.html"></iframe> -->
+        <iframe id="iframe" src="http://raspberrypi.local:8080/stream_simple.html"></iframe>
     </div>
+
+    <div id="clovers-container"></div>
+    <div id="qrcode-container">
+        <img id="qrcode-img" src="assets/qrcode_green2.png">
+    </div>
+
 </body>
 <script src="script.js"></script>
 </html>
