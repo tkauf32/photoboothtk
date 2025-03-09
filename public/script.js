@@ -44,15 +44,18 @@ document.addEventListener('DOMContentLoaded', function () {
     async function startCount() {
         let count = 4;
         countDown.textContent = count;
+        countDown.style.display = "inline";
         console.log("Count: ", count);
         const intervalId = setInterval(() => {
             if (count == 1) {
+                countDown.style.display = "none";
                 console.log("Count == 1");
                 clearInterval(intervalId);
             } else {
                 count--;
                 console.log("Count: ", count);
                 countDown.textContent = count;
+                countDown.style.display = "inline";
             }
         }, 1000);
     }
