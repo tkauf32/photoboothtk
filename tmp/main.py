@@ -50,6 +50,33 @@ encoded_image = encode_image_to_base64(input_image_path)
 #     "send_images": True,
 #     "save_images": True,
 # }
+prompt = {}
+
+prompt['Lego'] = ("Transform all people into detailed Lego minifigures, maintaining their unique features, clothing colors, "
+                  "and hairstyles. Render in a realistic Lego style with smooth plastic textures, defined edges, and subtle lighting. "
+                  "Ensure accurate facial expressions and iconic Lego-style eyes and mouths. Background elements should match the Lego aesthetic, "
+                  "appearing as brick-built structures. ((Highly detailed)), ((sharp focus)), ((cinematic lighting)).")
+
+prompt['Medieval'] = ("Transform all people into medieval fantasy characters, with period-accurate clothing, armor, and accessories. "
+                      "Stylize their attire based on status (royalty, knights, peasants, etc.), ensuring ornate embroidery, chainmail, or rugged fabrics where appropriate. "
+                      "Retain defining facial features while enhancing them with a hand-painted, historical illustration feel. "
+                      "Background elements should reflect medieval settings such as castles, villages, or dense forests. "
+                      "((Epic fantasy painting style)), ((intricate details)), ((dramatic lighting and shadows)).")
+
+prompt['Pixar'] = ("Render all people in Pixar-style 3D animation, with smooth, expressive faces, large glossy eyes, and soft lighting. "
+                   "Retain their defining facial features while slightly exaggerating expressions and proportions for a friendly, stylized effect. "
+                   "Clothing should be detailed with high-quality fabric textures. Background elements should match Pixar’s polished, cinematic style. "
+                   "((Hyper-detailed rendering)), ((soft shadows and highlights)), ((Pixar movie aesthetic)), ((warm lighting)).")
+
+prompt['Simpsons'] = ("Convert all people into The Simpsons animated style, featuring bold outlines, exaggerated facial features, and yellow-toned skin. "
+                      "Maintain unique hairstyles, accessories, clothing while simplifying details to match the classic Simpsons aesthetic. "
+                      "Background elements should use the same flat, cartoonish color palette and perspective. "
+                      "((Consistent with The Simpsons universe)), ((2D animation style)), ((bold black outlines)), ((flat vibrant colors)).")
+
+prompt['Anime'] = ("Stylize all people in high-quality anime style, with expressive eyes, sharp facial features, and vibrant hair colors. "
+                   "Maintain accurate clothing details while enhancing them with clean cel-shading and soft lighting. "
+                   "The background should complement the anime aesthetic, using a mix of painterly and cel-shaded effects. "
+                   "((Highly detailed linework)), ((smooth shading)), ((soft glowing highlights)), ((dynamic expressions)).")
 
 # API endpoint URL
 url = "http://192.168.4.88:7860"
@@ -66,8 +93,13 @@ url = "http://192.168.4.88:7860"
 #     "model": "flux1-dev-bnb-nf4-v2.safetensors",
 # }
 
+    # "styles": [
+    #     "Watercolor 2"
+    # ],
+
 payload = {
-    "prompt": "puppy dog mountain",
+    "init_images": [encoded_image],
+    "prompt": prompt['Simpsons'],
     "save_images": True,
     "send_images": True,
     "steps": 20,
@@ -76,6 +108,7 @@ payload = {
     "tiling": False,
     "sampler_name": "Euler",
     "scheduler": "simple",
+    "denoising_strength": 0.6,
     "override_settings": {
         'forge_preset': 'flux', 
         'forge_additional_modules': [], 
@@ -122,7 +155,7 @@ payload = {
 # print(options.json())
 # postreq = requests.post("http://192.168.4.88:7860/sdapi/v1/options", json={"forge_preset": "flux"})
 
-response = requests.post("http://192.168.4.88:7860/sdapi/v1/txt2img", json=payload)
+response = requests.post("http://192.168.4.88:7860/sdapi/v1/img2img", json=payload)
 
 # modelResponse = requests.post(url=f'{url}/sdapi/v1/options)', json={"sd_model_checkpoint": "flux1-dev-bnb-nf4-v2.safetensors"})
 
