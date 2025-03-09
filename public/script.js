@@ -8,7 +8,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const startOverButton = document.getElementById('startOverButton');
     const cameraStream = document.getElementById('cameraStream');
     const iframe = document.getElementById("iframe");
-    const countDownEl = document.getElementById('countdown');
+    const countDown = document.getElementById('countdown');
+    const showRecentImages = document.getElementById('showRecentImages');
+    const bottomContainer = document.getElementById('bottomContainer');
+    let capturedImagesArray = [];
 
     function resetToInitialState() {
         preview.style.display = 'none';
@@ -17,9 +20,10 @@ document.addEventListener('DOMContentLoaded', function () {
         backButton.style.display = 'none';
         startOverButton.style.display = 'none';
         iframe.style.display = 'inline'
-        countDownEl.style.display = 'none'
+        countDown.style.display = 'none'
         cameraStream.style.display = 'inline';
         iframe.style.display = 'inline';
+        bottomContainer.style.display = 'inline';
     }
 
     function showGrid() {
@@ -29,42 +33,57 @@ document.addEventListener('DOMContentLoaded', function () {
         startOverButton.style.display = 'block';
         iframe.style.display = 'none';
         cameraStream.style.display = 'none';
+        bottomContainer.style.display = 'none';
     }
 
-    // function startCountDown() {
-    //     let countDownValue = 3;
-    //     let NumberOfPhotosLeft = 4;
-    //     countDownEl.textContent = countDownValue;
+    socket.on('reset countdown', () => {
+        console.log('reset countdown');
+        startCount();
+    });
 
-    //     const intervalId = setInterval(() => {
-    //         countDownEl.style.display = "inline"; // show the countdown element on screen
-    //         // if we still have photos left, reset the timer
+    async function startCount() {
+        let count = 4;
+        countDown.textContent = count;
+        console.log("Count: ", count);
+        const intervalId = setInterval(() => {
+            if (count == 1) {
+                console.log("Count == 1");
+                clearInterval(intervalId);
+            } else {
+                count--;
+                console.log("Count: ", count);
+                countDown.textContent = count;
+            }
+        }, 1000);
+    }
 
-    //         if (countDownValue < 1) {
-    //             if (NumberOfPhotosLeft > 0) {
-    //                 flashScreen() // make the screen flash!!!
-    //                 NumberOfPhotosLeft--
-    //                 countDownValue=3
-    //                 console.log("Resetting countdown. photo #%d", NumberOfPhotosLeft)
-    //             } else {
-    //                 console.log("Done!")
-    //                 countDownEl.style.display = "none"; // hide the coundown element
-    //                 clearInterval(intervalId)
-    //             }
-    //             console.log("Resetting countdown. photo #%d", NumberOfPhotosLeft)
+    function startCountDown() {
+        let countDownValue = 5;
+        let NumberOfPhotosLeft = 4;
+        countDown.textContent = countDownValue;
 
-    //         } else {
-    //             countDownValue--
-    //         }
-    //         countDownEl.textContent = countDownValue;
+        const intervalId = setInterval(() => {
+            // if we still have photos left, reset the timer
 
-    //     }, 1000);
+            if (countDownValue == 1) {
+                if (NumberOfPhotosLeft > 0) {
+                    NumberOfPhotosLeft--;
+                    countDownValue=5;
+                    console.log("Resetting countdown. photo #%d", NumberOfPhotosLeft);
+                } else {
+                    console.log("Done!");
+                    countDown.style.display = "none"; // hide the coundown element
+                    clearInterval(intervalId);
+                }
+
+            } else {
+                countDownValue--;
+            }
+            countDown.textContent = countDownValue;
+
+        }, 1000);
         
-    // }
-    
-    // function flashScreen() {
-
-    // }
+    }
 
     function makeMainImage(imgPath) {
         preview.src = imgPath;
@@ -78,11 +97,16 @@ document.addEventListener('DOMContentLoaded', function () {
         makeMainImage(data.path);
     });
 
-    socket.on('display all images', data => {
-        // startButton.style.display = 'none'
-        console.log('Received images:', data);
+    function displayAllImages(images) {
+        // if (images == null) {
+        //     console.log("Passed image array is null, exiting");
+        //     socket.emit("gimme images");
+        //     return;
+        // }
+
+        console.log("Displaying all images: ", images);
         imageContainer.innerHTML = '';
-        data.images.forEach(imgPath => {
+        images.forEach(imgPath => {
             console.log("Image URL: ", imgPath);
             const img = document.createElement('img');
             img.src = imgPath;
@@ -91,24 +115,41 @@ document.addEventListener('DOMContentLoaded', function () {
                 makeMainImage(imgPath);
                 backButton.style.display = 'block'; // Show back button only when an image is enlarged
                 iframe.style.display = 'none'   // hide the iframe
-
             };
             imageContainer.appendChild(img);
         });
         showGrid();
+    }
+
+    socket.on('display all images', data => {
+        // startButton.style.display = 'none'
+        console.log('Received images:', data);
+        capturedImagesArray = data.images;
+        displayAllImages(capturedImagesArray);
     });
 
     backButton.onclick = showGrid; // When back button is clicked, return to grid view
     startOverButton.onclick = resetToInitialState; // When start over is clicked, reset
 
-
-
+    showRecentImages.onclick = () => {
+        console.log('show recents clicked');
+        if (capturedImagesArray.length == 0) {
+            socket.emit('fuck');
+            console.log('here');
+        } else { 
+            displayAllImages(capturedImagesArray);
+            console.log('here2');
+        }
+    }
+    
     startButton.onclick = () => {
         socket.emit('start capture');
-        //startCountDown()
+        countDown.style.display = "inline";
+        // startCountDown();
+        startCount();
         startButton.style.display = 'none'; // Hide start button after sequence starts
         startOverButton.style.display = 'none'; // Hide start over during sequence
-
+        bottomContainer.style.display = 'none'; 
     };
 
     // Detect clicks on the body but not on the image

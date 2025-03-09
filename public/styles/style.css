@@ -63,6 +63,19 @@ html, body {
     z-index: 1;
 }
 
+#countdown {
+    color: rgba(255, 255, 255, 0.4);
+    z-index: 3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 100px; /* Adjust as needed */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
 #imageContainer {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -136,6 +149,26 @@ button {
 
 #backButton {
     display: none;
+}
+
+#bottomContainer {
+    position: absolute; /* Allows precise positioning */
+    top: 95%; /* Moves it 68% down from the top */
+    left: 50%; /* Centers it horizontally */
+    transform: translate(-50%, -50%); /* Adjusts to true center */
+    z-index: 1;
+    width: 100px; /* Adjust size as needed */
+    height: 100px;
+    display: inline;
+}
+
+#showRecentImages {
+    /* background-color: rgba(169, 169, 169, 0.6); */
+    display: inline;
+    position: absolute;
+    left: 50%;
+    bottom: 50%;  /* Places the button 12.5% above the bottom edge */
+    transform: translate(-50%, 50%); /* Offsets the button so its center is at that point */
 }
 
 #startButton {
