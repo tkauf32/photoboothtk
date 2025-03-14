@@ -9,10 +9,10 @@ from PIL import Image, PngImagePlugin
 
 prompt = {}
 prompt['Lego'] = (
-    "Transform all people into detailed Lego minifigures, maintaining their unique features, clothing colors, "
-    "and hairstyles. Render in a realistic Lego style with smooth plastic textures, defined edges, and subtle lighting. "
-    "Ensure accurate facial expressions and iconic Lego-style eyes and mouths. Background elements should match the Lego aesthetic, "
-    "appearing as brick-built structures. ((Highly detailed)), ((sharp focus)), ((cinematic lighting))."
+    "Transform all people into detailed LEGO minifigures, maintaining their unique features, clothing colors, "
+    "and hairstyles. Render in a realistic LEGO style with smooth plastic textures, defined edges, and subtle lighting. "
+    "Ensure accurate facial expressions and iconic LEGO-style eyes and mouths. Background elements should match the Lego aesthetic, "
+    "appearing as brick-built structures. ((LEGO)), ((Highly detailed)), ((sharp focus)), ((cinematic lighting))."
 )
 prompt['Medieval'] = (
     "Transform all people into medieval fantasy characters, with period-accurate clothing, armor, and accessories. "
@@ -56,10 +56,8 @@ def encode_image_to_base64(image_path):
     with open(image_path, "rb") as image_file:
         return base64.b64encode(image_file.read()).decode('utf-8')
     
-def encode_image_to_base64(image_path):
-    with open(image_path, "rb") as image_file:
-        return base64.b64encode(image_file.read()).decode('utf-8')
-    
+# Removed duplicate encode_image_to_base64 definition
+
 def img2img(base_url, encoded_image, input_image_path, prompt_key, output_directory):
     print(f"Working on {input_image_path}")
     
@@ -74,7 +72,7 @@ def img2img(base_url, encoded_image, input_image_path, prompt_key, output_direct
         "tiling": False,
         "sampler_name": "Euler",
         "scheduler": "simple",
-        "denoising_strength": 0.75,
+        "denoising_strength": 0.7,
         "override_settings": {
             'forge_preset': 'flux', 
             'forge_additional_modules': [], 
@@ -121,6 +119,7 @@ def img2img(base_url, encoded_image, input_image_path, prompt_key, output_direct
     r = response.json()
 
     now = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    output_image_path = None  # ADDED CODE: Initialize variable to store output image path
     if response.status_code == 200:
         modified_images = []
         for idx, image_b64 in enumerate(r.get('images', [])):
@@ -134,7 +133,7 @@ def img2img(base_url, encoded_image, input_image_path, prompt_key, output_direct
             pnginfo = PngImagePlugin.PngInfo()
             pnginfo.add_text("parameters", parameters)
 
-            output_image_path = os.path.join(output_directory, f"{now}_{prompt_key}.png")
+            output_image_path = os.path.join(output_directory, f"{now}_{prompt_key}.png")  # ADDED CODE: Save output image path
             image.save(output_image_path, pnginfo=pnginfo)
             print(f"Output image saved at {output_image_path}")
             modified_images.append(output_image_path)
@@ -155,13 +154,55 @@ def img2img(base_url, encoded_image, input_image_path, prompt_key, output_direct
         f.write(json.dumps(combined_log, indent=4))
 
     print(f"Finished {input_image_path}")
+    
+    # ADDED CODE: Return a tuple of the input image path and the output image path
+    return input_image_path, output_image_path
+
+# ADDED CODE: Function to create a macro image from input/output image pairs.
+def create_macro_image(image_pairs, macro_image_path):
+    """
+    image_pairs: list of tuples (input_image_path, output_image_path)
+    macro_image_path: path to save the combined macro image.
+    """
+    # Open the first pair to determine dimensions (assuming all images are similar in size)
+    first_input = Image.open(image_pairs[0][0])
+    first_output = Image.open(image_pairs[0][1])
+    width_input, height_input = first_input.size
+    width_output, height_output = first_output.size
+    
+    # Use maximum dimensions for each column (in case sizes differ slightly)
+    cell_width = max(width_input, width_output)
+    cell_height = max(height_input, height_output)
+    
+    # Calculate final dimensions: two columns, one row per pair.
+    macro_width = cell_width * 2
+    macro_height = cell_height * len(image_pairs)
+    
+    macro_image = Image.new('RGB', (macro_width, macro_height), color=(255, 255, 255))
+    
+    for i, (inp_path, out_path) in enumerate(image_pairs):
+        inp = Image.open(inp_path)
+        outp = Image.open(out_path)
+        
+        # Resize images if they differ from the cell dimensions
+        if inp.size != (cell_width, cell_height):
+            inp = inp.resize((cell_width, cell_height))
+        if outp.size != (cell_width, cell_height):
+            outp = outp.resize((cell_width, cell_height))
+        
+        y_offset = i * cell_height
+        macro_image.paste(inp, (0, y_offset))
+        macro_image.paste(outp, (cell_width, y_offset))
+    
+    macro_image.save(macro_image_path)
+    print(f"Macro image saved at {macro_image_path}")
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-sdbu', '--baseurl', type=str, required=True, help="Stable Diffussion base url like: http//127.0.0.1:7861")
     parser.add_argument('-ipd', '--ipathd', type=str, required=True, help="Directory with input images.")
     parser.add_argument('-opd', '--opathd', type=str, required=True, help="Directory to put output images.")
-    parser.add_argument('-pl', '--promptlist', type=str, required=True, help='comma delimited list of prompt keys like: "Anime,Simpsons,Pixar,Medieval" which will be applied to the images.')
+    parser.add_argument('-pl', '--promptlist', type=str, required=True, help='Comma delimited list of prompt keys like: "Anime,Simpsons,Pixar,Medieval" which will be applied to the images.')
 
     args = parser.parse_args()
 
@@ -177,8 +218,17 @@ def main():
 
     assert len(prompts) == len(image_paths) == len(encoded_images)
 
+    # ADDED CODE: List to store input/output image pairs for the macro image.
+    image_pairs = []
+    
     for i in range(len(image_paths)):
-        img2img(args.baseurl, encoded_images[i], image_paths[i], prompts[i], output_folder)
+        pair = img2img(args.baseurl, encoded_images[i], image_paths[i], prompts[i], output_folder)
+        image_pairs.append(pair)
+        
+    # ADDED CODE: After processing all images, create the macro image.
+    if image_pairs:
+        macro_image_path = os.path.join(output_folder, "macro_image.png")
+        create_macro_image(image_pairs, macro_image_path)
 
 if __name__ == '__main__':
     main()
