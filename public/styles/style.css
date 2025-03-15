@@ -115,18 +115,19 @@ html, body {
 
 #qrcode-container {
     position: absolute; /* Allows precise positioning */
-    top: 10%; /* Moves it 68% down from the top */
+    top: 10%; /* Moves it down from the top */
     left: 50%; /* Centers it horizontally */
     transform: translate(-50%, -50%); /* Adjusts to true center */
     z-index: 1;
     width: 200px; /* Adjust size as needed */
     height: 200px;
 }
-
+  
 #qrcode-img {
     display: block; /* Ensures proper rendering */
     width: 100%; /* Makes the image fit inside the container */
     height: auto;
+    cursor: pointer; /* Shows a pointer cursor on hover */
 }
 
 #iframe {

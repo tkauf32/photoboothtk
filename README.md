@@ -130,6 +130,26 @@ of images matches the number of prompts in the prompt list.
 
 python3 .\img2img.py -sdbu "http://127.0.0.1:7860" -ipd "inputs" -opd "outputs" -pl "Simpsons,Lego,Pixar,Simpsons"
 
+
+```bash
+python img2img.py -sdbu "http://192.168.4.133:7860" --ipathd "test/inputs" --opathd "test/outputs" --rpath "ai_images" --promptlist "Medieval,Medieval,Lego,Medieval"
+```
+# qrcode
+```bash
+sudo apt-get install qrencode
+sudo apt-get install imagemagick```
+
+```bash
+# Album 1
+qrencode -o album1.png 'https://example.com/album1'
+convert album1.png -fuzz 10% -fill green -opaque black -transparent white album1_green.png
+echo "Album 1 QR code generated as album1_green.png"
+
+# Album 2
+qrencode -o album2.png 'https://example.com/album2'
+convert album2.png -fuzz 10% -fill green -opaque black -transparent white album2_green.png
+echo "Album 2 QR code generated as album2_green.png"
+```
 # ideas
 
 ## Realistic

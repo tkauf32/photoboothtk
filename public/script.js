@@ -12,6 +12,26 @@ document.addEventListener('DOMContentLoaded', function () {
     const showRecentImages = document.getElementById('showRecentImages');
     const bottomContainer = document.getElementById('bottomContainer');
     let capturedImagesArray = [];
+    const qrImg = document.getElementById('qrcode-img');
+    // Define the two image sources
+    const stPattiesSrc = 'assets/St-Patties-Day-2025-Photobooth_green.png';
+    const photoboothSrc = 'assets/PhotoboothAI_green.png';
+
+    // Set the default image to St-Patties
+    let current = 'stPatties';
+    qrImg.src = stPattiesSrc;
+    
+    // Add click event listener to toggle images
+    qrImg.addEventListener('click', function() {
+        if (current === 'stPatties') {
+        qrImg.src = photoboothSrc;
+        current = 'photobooth';
+        } else {
+        qrImg.src = stPattiesSrc;
+        current = 'stPatties';
+        }
+    });
+
 
     function resetToInitialState() {
         preview.style.display = 'none';

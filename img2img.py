@@ -66,7 +66,7 @@ def img2img(base_url, encoded_image, input_image_path, prompt_key, output_direct
         "prompt": prompt[prompt_key],
         "save_images": True,
         "send_images": True,
-        "steps": 20,
+        "steps": 5,
         "cfg_scale": 1.0,
         "distilled_cfg_scale": 3.5,
         "tiling": False,
