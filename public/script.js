@@ -56,13 +56,18 @@ document.addEventListener('DOMContentLoaded', function () {
         bottomContainer.style.display = 'none';
     }
 
-    socket.on('reset countdown', () => {
+    socket.on('reset countdown', (photoCount) => {
         console.log('reset countdown');
-        startCount();
+        startCount(photoCount);
     });
 
-    async function startCount() {
-        let count = 4;
+    async function startCount(photoCount) {
+        if (photoCount == 0) {
+            countDown.style.display = "none";
+            console.log("PhotoCount == 0 (meaning we took all 4 photos). Ending counter.");
+            return
+        }
+        let count = 3;
         countDown.textContent = count;
         countDown.style.display = "inline";
         console.log("Count: ", count);
@@ -80,33 +85,33 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 1000);
     }
 
-    function startCountDown() {
-        let countDownValue = 5;
-        let NumberOfPhotosLeft = 4;
-        countDown.textContent = countDownValue;
+    // function startCountDown() {
+    //     let countDownValue = 5;
+    //     let NumberOfPhotosLeft = 4;
+    //     countDown.textContent = countDownValue;
 
-        const intervalId = setInterval(() => {
-            // if we still have photos left, reset the timer
+    //     const intervalId = setInterval(() => {
+    //         // if we still have photos left, reset the timer
 
-            if (countDownValue == 1) {
-                if (NumberOfPhotosLeft > 0) {
-                    NumberOfPhotosLeft--;
-                    countDownValue=5;
-                    console.log("Resetting countdown. photo #%d", NumberOfPhotosLeft);
-                } else {
-                    console.log("Done!");
-                    countDown.style.display = "none"; // hide the coundown element
-                    clearInterval(intervalId);
-                }
+    //         if (countDownValue == 1) {
+    //             if (NumberOfPhotosLeft > 0) {
+    //                 NumberOfPhotosLeft--;
+    //                 countDownValue=5;
+    //                 console.log("Resetting countdown. photo #%d", NumberOfPhotosLeft);
+    //             } else {
+    //                 console.log("Done!");
+    //                 countDown.style.display = "none"; // hide the coundown element
+    //                 clearInterval(intervalId);
+    //             }
 
-            } else {
-                countDownValue--;
-            }
-            countDown.textContent = countDownValue;
+    //         } else {
+    //             countDownValue--;
+    //         }
+    //         countDown.textContent = countDownValue;
 
-        }, 1000);
+    //     }, 1000);
         
-    }
+    // }
 
     function makeMainImage(imgPath) {
         preview.src = imgPath;
@@ -127,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function () {
         //     return;
         // }
 
-        console.log("Displaying all images: ", images);
+        // console.log("Displaying all images: ", images);
         imageContainer.innerHTML = '';
         images.forEach(imgPath => {
             console.log("Image URL: ", imgPath);
@@ -216,6 +221,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     
     // Create a new clover every 500 milliseconds
-    setInterval(createClover, 200);
+    setInterval(createClover, 500);
 
 });

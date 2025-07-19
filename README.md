@@ -150,6 +150,14 @@ qrencode -o album2.png 'https://example.com/album2'
 convert album2.png -fuzz 10% -fill green -opaque black -transparent white album2_green.png
 echo "Album 2 QR code generated as album2_green.png"
 ```
+
+# rclone
+## List albums
+```bash
+rclone lsd gphotos:${album}
+```
+
+
 # ideas
 
 ## Realistic
